@@ -8,6 +8,7 @@ export function Todo() {
       sx={{
         display: "flex",
         justifyContent: "center",
+        alignItems: "center",
         flexDirection: "column",
         position: "relative",
         top: "-25px",
