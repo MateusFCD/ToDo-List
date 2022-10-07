@@ -63,4 +63,34 @@ export const Button = styled.button`
   justify-content: center;
   display: flex;
   gap: 8px;
+  cursor: pointer;
+`;
+
+export const TasksCreated = styled.span`
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4ea8de;
+`;
+
+export const TasksDone = styled.span`
+  font-size: 1rem;
+  font-weight: 700;
+  color: #8284fa;
+`;
+
+export const TaskTodo = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  gap: 12px;
+  width: 736px;
+  height: 72px;
+  background: #262626;
+  border: 1px solid #333333;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  margin-top: 24px;
+  color: #f2f2f2;
 `;
