@@ -1,25 +1,34 @@
 import { Container, Box } from "@mui/material";
-import { Input, Button, TasksCreated, TasksDone } from "../../theme";
-import { PlusCircle, Trash } from "phosphor-react";
-import { useState } from "react";
-import { TaskTodo } from "../../theme";
-import CheckBox from "@mui/material/Checkbox";
+import { Input, Button, TasksCreated, TasksDone, SpanCount } from "../../theme";
+import { PlusCircle } from "phosphor-react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Task } from "../Task";
 
 export function Todo() {
-  const [taskCreate, setTaskCreate] = useState(0);
-  const [done, setDone] = useState(0);
-  const [task, setTask] = useState(["Teste"]);
-  const [newTask, setNewTask] = useState("");
+  const [tasks, setTasks] = useState<string[]>([]);
+  const [newTaskText, setNewTaskText] = useState("");
 
   function handleCreateNewTask() {
     event?.preventDefault();
-    setTask([...task, setNewTask]);
-    setNewTask("");
+
+    setTasks([...tasks, newTaskText]);
+    setNewTaskText("");
   }
 
   function handleNewTaskChange() {
-    setNewTask(event?.target.value);
+    setNewTaskText(event?.target.value);
   }
+
+  function deleteTask(tasksToDelete: string) {
+    const tasksWithoutDeletedOne = tasks.filter((task) => {
+      return task !== tasksToDelete;
+    });
+
+    setTasks(tasksWithoutDeletedOne);
+  }
+
+  const count = tasks.length;
+
   return (
     <Container
       sx={{
@@ -35,8 +44,8 @@ export function Todo() {
         <Box sx={{ display: "flex" }}>
           <Input
             name="task"
-            value={newTask}
             placeholder="Adicione uma nova tarefa"
+            value={newTaskText}
             onChange={handleNewTaskChange}
           />
           <Button type="submit">
@@ -55,22 +64,16 @@ export function Todo() {
           }}
         >
           <TasksCreated>
-            Tarefas criadas <span>{taskCreate}</span>
+            Tarefas criadas <SpanCount>{count}</SpanCount>
           </TasksCreated>
           <TasksDone>
-            Concluídos <span>{done}</span>
+            Concluídos <SpanCount></SpanCount>
           </TasksDone>
         </Box>
 
         <Box>
-          {task.map((task) => {
-            return (
-              <TaskTodo key={task}>
-                <CheckBox />
-                {task}
-                <Trash size={20} />
-              </TaskTodo>
-            );
+          {tasks.map((task) => {
+            return <Task key={task} content={task} onDeleteTask={deleteTask} />;
           })}
         </Box>
       </form>

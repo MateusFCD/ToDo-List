@@ -64,6 +64,11 @@ export const Button = styled.button`
   display: flex;
   gap: 8px;
   cursor: pointer;
+  transition: 0.3s;
+
+  :hover {
+    background-color: #4ea8de;
+  }
 `;
 
 export const TasksCreated = styled.span`
@@ -81,6 +86,7 @@ export const TasksDone = styled.span`
 export const TaskTodo = styled.div`
   box-sizing: border-box;
   display: flex;
+  word-wrap: break-word;
   flex-direction: row;
   align-items: center;
   padding: 16px;
@@ -93,4 +99,23 @@ export const TaskTodo = styled.div`
   border-radius: 8px;
   margin-top: 24px;
   color: #f2f2f2;
+`;
+
+export const ButtonDelete = styled.button`
+  background: none;
+  border: none;
+  display: block;
+  position: absolute;
+  left: 910px;
+  color: #808080;
+  cursor: pointer;
+`;
+
+export const SpanCount = styled.span`
+  width: 24px;
+  height: 19px;
+  padding: 2px 8px;
+  background: #333333;
+  color: #f2f2f2;
+  border-radius: 999px;
 `;
