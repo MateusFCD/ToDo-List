@@ -3,6 +3,7 @@ import { Input, Button, TasksCreated, TasksDone, SpanCount } from "../../theme";
 import { PlusCircle } from "phosphor-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Task } from "../Task";
+import { Warning } from "../Warning";
 
 export function Todo() {
   const [tasks, setTasks] = useState<string[]>([]);
@@ -59,7 +60,7 @@ export function Todo() {
             display: "flex",
             justifyContent: "space-between",
             alignItens: "flex-end",
-            gap: "530px",
+            gap: "400px",
             marginTop: "4rem",
           }}
         >
@@ -67,14 +68,21 @@ export function Todo() {
             Tarefas criadas <SpanCount>{count}</SpanCount>
           </TasksCreated>
           <TasksDone>
-            Concluídos <SpanCount></SpanCount>
+            Concluídas <SpanCount>{`${count} de ${count}`}</SpanCount>
           </TasksDone>
         </Box>
 
         <Box>
-          {tasks.map((task) => {
-            return <Task key={task} content={task} onDeleteTask={deleteTask} />;
-          })}
+          {tasks.length > 0 ? (
+            tasks.map((task) => {
+              return (
+                <Task key={task} content={task} onDeleteTask={deleteTask} />
+              );
+            })
+          ) : (
+            <Warning />
+          )}
+          ;
         </Box>
       </form>
     </Container>

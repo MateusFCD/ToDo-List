@@ -21,6 +21,15 @@ export const theme = createTheme({
       default: "#1A1A1A", //600
     },
   },
+  components: {
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          
+        },
+      },
+    },
+  },
 });
 
 export const To = styled.span`
@@ -106,7 +115,7 @@ export const ButtonDelete = styled.button`
   border: none;
   display: block;
   position: absolute;
-  left: 910px;
+  left: 920px;
   color: #808080;
   cursor: pointer;
 `;
@@ -118,4 +127,30 @@ export const SpanCount = styled.span`
   background: #333333;
   color: #f2f2f2;
   border-radius: 999px;
+`;
+
+export const WarningContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+
+  svg {
+    color: #808080;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #808080;
+    line-height: 22.4px;
+    padding: 0;
+    margin: 0;
+
+    :after {
+      font-weight: 400;
+    }
+  }
 `;
