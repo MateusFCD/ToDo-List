@@ -8,6 +8,7 @@ import { Warning } from "../Warning";
 export function Todo() {
   const [tasks, setTasks] = useState<string[]>([]);
   const [newTaskText, setNewTaskText] = useState("");
+  const [done, setDone] = useState(false);
 
   function handleCreateNewTask() {
     event?.preventDefault();
@@ -26,6 +27,10 @@ export function Todo() {
     });
 
     setTasks(tasksWithoutDeletedOne);
+  }
+
+  function CountTasksDone() {
+    setDone(true);
   }
 
   const count = tasks.length;
@@ -76,7 +81,12 @@ export function Todo() {
           {tasks.length > 0 ? (
             tasks.map((task) => {
               return (
-                <Task key={task} content={task} onDeleteTask={deleteTask} />
+                <Task
+                  key={task}
+                  content={task}
+                  onDeleteTask={deleteTask}
+                  onCountTaskDone={CountTasksDone}
+                />
               );
             })
           ) : (

@@ -7,24 +7,23 @@ import React, { SyntheticEvent, useState } from "react";
 interface PropsTask {
   content: string;
   onDeleteTask: (task: string) => void;
+  onCountTaskDone: (done: boolean) => void;
 }
 
-export function Task({ content, onDeleteTask }: PropsTask) {
-  const [done, setDone] = useState(false);
-  console.log({ done });
-
-  const handleTaskDone = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDone(event.target.checked);
-  };
+export function Task({ content, onDeleteTask, onCountTaskDone }: PropsTask) {
+  function handleTaskDone() {
+    onCountTaskDone(false);
+  }
+  console.log({ handleTaskDone });
 
   function handleDeleteTask() {
     onDeleteTask(content);
   }
 
   return (
-    <TaskTodo >
+    <TaskTodo>
       <FormControlLabel
-        control={<CheckBox checked={done} />}
+        control={<CheckBox onChange={handleTaskDone} />}
         label={content}
         onChange={handleTaskDone}
       />
