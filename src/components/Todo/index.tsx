@@ -1,51 +1,60 @@
 import { Container, Box } from "@mui/material";
-import { Input, Button, TasksCreated, TasksDone, SpanCount } from "../../theme";
+import {
+  Input,
+  Button,
+  TasksCreated,
+  TasksDone,
+  SpanCount,
+  TaskTodo,
+  ButtonDelete,
+} from "../../theme";
 import { PlusCircle } from "phosphor-react";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { Task } from "../Task";
+import { useState } from "react";
 import { Warning } from "../Warning";
 
-import { FormControlLabel } from "@mui/material";
-import CheckBox from "@mui/material/Checkbox";
+import { Trash } from "phosphor-react";
+import styled from "styled-components";
+
+interface Task {
+  id: number;
+  text: string;
+  isCompleted: boolean;
+}
 
 export function Todo() {
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskText, setNewTaskText] = useState("");
-  const [done, setDone] = useState<boolean[]>([[]]);
 
   function handleCreateNewTask() {
     event?.preventDefault();
-
-    setTasks([...tasks, newTaskText]);
+    if (newTaskText) {
+      setTasks([
+        ...tasks,
+        {
+          id: new Date().getMilliseconds(),
+          text: newTaskText,
+          isCompleted: false,
+        },
+      ]);
+    }
     setNewTaskText("");
   }
 
-  function handleNewTaskChange() {
-    setNewTaskText(event?.target.value);
+  function handleNewTaskChange(id: number) {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id
+          ? { ...task, isCompleted: !task.isCompleted }
+          : { ...task }
+      )
+    );
   }
 
-  function deleteTask(tasksToDelete: string) {
-    const tasksWithoutDeletedOne = tasks.filter((task) => {
-      return task !== tasksToDelete;
-    });
-
-    setTasks(tasksWithoutDeletedOne);
+  function deleteTask(id: number) {
+    setTasks(tasks.filter((task) => task.id !== id));
   }
-
-  const CountTasksDone = (event: any) => {
-    //React.ChangeEvent<HTMLInputElement> : tipo de event ** ver ajuda nisso.
-    setDone([event.target.checked]);
-  };
 
   const count = tasks.length;
-
-  function Convert() {
-    if (done === true) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
 
   return (
     <Container
@@ -64,9 +73,9 @@ export function Todo() {
             name="task"
             placeholder="Adicione uma nova tarefa"
             value={newTaskText}
-            onChange={handleNewTaskChange}
+            onChange={(e) => setNewTaskText(e.target.value)}
           />
-          <Button type="submit">
+          <Button type="submit" onClick={handleCreateNewTask}>
             Criar
             <PlusCircle size={20} />
           </Button>
@@ -85,7 +94,7 @@ export function Todo() {
             Tarefas criadas <SpanCount>{count}</SpanCount>
           </TasksCreated>
           <TasksDone>
-            Concluídas <SpanCount>{`${Convert()} de ${count}`}</SpanCount>
+            Concluídas <SpanCount>{`${[]} de ${count}`}</SpanCount>
           </TasksDone>
         </Box>
 
@@ -93,15 +102,18 @@ export function Todo() {
           {tasks.length > 0 ? (
             tasks.map((task) => {
               return (
-                <>
-                  <Task key={task} content={task} onDeleteTask={deleteTask}>
-                    <FormControlLabel
-                      control={<CheckBox checked={done[[]]} />}
-                      label={task}
-                      onChange={CountTasksDone}
-                    />
-                  </Task>
-                </>
+                <TaskTodo key={task.id}>
+                  <input
+                    type="checkbox"
+                    readOnly
+                    checked={task.isCompleted}
+                    onClick={() => handleNewTaskChange(task.id)}
+                  />
+                  {task.text}
+                  <ButtonDelete onClick={() => deleteTask(task.id)}>
+                    <Trash size={20} />
+                  </ButtonDelete>
+                </TaskTodo>
               );
             })
           ) : (
