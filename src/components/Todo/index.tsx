@@ -1,14 +1,17 @@
 import { Container, Box } from "@mui/material";
 import { Input, Button, TasksCreated, TasksDone, SpanCount } from "../../theme";
 import { PlusCircle } from "phosphor-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Task } from "../Task";
 import { Warning } from "../Warning";
+
+import { FormControlLabel } from "@mui/material";
+import CheckBox from "@mui/material/Checkbox";
 
 export function Todo() {
   const [tasks, setTasks] = useState<string[]>([]);
   const [newTaskText, setNewTaskText] = useState("");
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<boolean[]>([[]]);
 
   function handleCreateNewTask() {
     event?.preventDefault();
@@ -29,11 +32,20 @@ export function Todo() {
     setTasks(tasksWithoutDeletedOne);
   }
 
-  function CountTasksDone() {
-    setDone(true);
-  }
+  const CountTasksDone = (event: any) => {
+    //React.ChangeEvent<HTMLInputElement> : tipo de event ** ver ajuda nisso.
+    setDone([event.target.checked]);
+  };
 
   const count = tasks.length;
+
+  function Convert() {
+    if (done === true) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   return (
     <Container
@@ -73,7 +85,7 @@ export function Todo() {
             Tarefas criadas <SpanCount>{count}</SpanCount>
           </TasksCreated>
           <TasksDone>
-            Concluídas <SpanCount>{`${count} de ${count}`}</SpanCount>
+            Concluídas <SpanCount>{`${Convert()} de ${count}`}</SpanCount>
           </TasksDone>
         </Box>
 
@@ -81,12 +93,15 @@ export function Todo() {
           {tasks.length > 0 ? (
             tasks.map((task) => {
               return (
-                <Task
-                  key={task}
-                  content={task}
-                  onDeleteTask={deleteTask}
-                  onCountTaskDone={CountTasksDone}
-                />
+                <>
+                  <Task key={task} content={task} onDeleteTask={deleteTask}>
+                    <FormControlLabel
+                      control={<CheckBox checked={done[[]]} />}
+                      label={task}
+                      onChange={CountTasksDone}
+                    />
+                  </Task>
+                </>
               );
             })
           ) : (
