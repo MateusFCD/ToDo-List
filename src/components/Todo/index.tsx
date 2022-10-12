@@ -7,13 +7,13 @@ import {
   SpanCount,
   TaskTodo,
   ButtonDelete,
+  CheckBox,
 } from "../../theme";
 import { PlusCircle } from "phosphor-react";
 import { useState } from "react";
 import { Warning } from "../Warning";
 
 import { Trash } from "phosphor-react";
-import styled from "styled-components";
 
 interface Task {
   id: number;
@@ -24,6 +24,8 @@ interface Task {
 export function Todo() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskText, setNewTaskText] = useState("");
+  const [completedTaskCount, setCompletedTaskCount] = useState(0);
+  console.log(completedTaskCount);
 
   function handleCreateNewTask() {
     event?.preventDefault();
@@ -55,6 +57,24 @@ export function Todo() {
   }
 
   const count = tasks.length;
+
+  const handleComplete = (id: number) => {
+    let list = tasks.map((task) => {
+      let item = {};
+      if (task.id == id) {
+        if (!task.isCompleted) {
+          //Task is pending, modifying it to complete and increment the count
+          setCompletedTaskCount(completedTaskCount + 1);
+        } else {
+          //Task is complete, modifying it back to pending, decrement Complete count
+          setCompletedTaskCount(completedTaskCount - 1);
+        }
+        item = { ...task, isCompleted: !task.isCompleted };
+      } else item = { ...task };
+      return item;
+    });
+    setTasks(list as any);
+  };
 
   return (
     <Container
@@ -94,7 +114,8 @@ export function Todo() {
             Tarefas criadas <SpanCount>{count}</SpanCount>
           </TasksCreated>
           <TasksDone>
-            Concluídas <SpanCount>{`${[]} de ${count}`}</SpanCount>
+            Concluídas{" "}
+            <SpanCount>{`${completedTaskCount} de ${count}`}</SpanCount>
           </TasksDone>
         </Box>
 
@@ -102,14 +123,17 @@ export function Todo() {
           {tasks.length > 0 ? (
             tasks.map((task) => {
               return (
-                <TaskTodo key={task.id}>
-                  <input
+                <TaskTodo
+                  key={task.id}
+                  onChange={() => handleNewTaskChange(task.id)}
+                >
+                  <CheckBox
                     type="checkbox"
                     readOnly
                     checked={task.isCompleted}
-                    onClick={() => handleNewTaskChange(task.id)}
+                    onClick={() => handleComplete(task.id)}
                   />
-                  {task.text}
+                  <p>{task.text}</p>
                   <ButtonDelete onClick={() => deleteTask(task.id)}>
                     <Trash size={20} />
                   </ButtonDelete>
